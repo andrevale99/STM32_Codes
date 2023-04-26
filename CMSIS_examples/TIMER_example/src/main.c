@@ -57,7 +57,7 @@ void TIMER4_Setup(void)
     //Ativa o prescale do contador
     TIM3->PSC = 1025;
 
-    //Ativa o evento
+    //Ativa o evento somente pelo Contador
     TIM3->EGR |= TIM_EGR_UG;
 
     //Ativa a interrupcao
