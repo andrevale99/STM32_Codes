@@ -1,6 +1,6 @@
 #include <stm32f411xe.h>
 
-
+#define FREQ 10
 
 //============================================================
 //  VARIVEIS
@@ -52,7 +52,7 @@ void TIMER4_Setup(void)
     RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
 
     //Carrega o valor maximo da contagem
-    TIM3->ARR = (uint16_t)15635/10;
+    TIM3->ARR = (uint16_t)15635/FREQ;
 
     //Ativa o prescale do contador
     TIM3->PSC = 1025;
