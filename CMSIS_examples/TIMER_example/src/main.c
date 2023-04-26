@@ -10,7 +10,7 @@ volatile uint8_t cnt = 0;
 //  PROTOTIPOS
 //============================================================
 void GPIO_Setup(void);
-void TIMER4_Setup(void);
+void TIMER3_Setup(void);
 
 void TIM3_IRQHandler(void);
 //============================================================
@@ -19,7 +19,7 @@ void TIM3_IRQHandler(void);
 int main(void)
 {
     GPIO_Setup();
-    TIMER4_Setup();
+    TIMER3_Setup();
     
     while(1)
     {
@@ -46,7 +46,7 @@ void GPIO_Setup(void)
     GPIOC->BSRR |= GPIO_BSRR_BR13;
 }
 
-void TIMER4_Setup(void)
+void TIMER3_Setup(void)
 {
     //TIMER3 de 16 bits ativado
     RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
