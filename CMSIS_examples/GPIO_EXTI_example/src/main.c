@@ -79,8 +79,12 @@ void GPIO_setup(void)
 
 void EXTI15_10_IRQHandler(void)
 {
-    flag = 1;
-
-    NVIC_ClearPendingIRQ(EXTI15_10_IRQn);
-    EXTI->PR |= EXTI_PR_PR13;
+    //Verifica se foi o pino PB13 o acionado
+    if(EXTI->PR & EXTI_PR_PR13)
+    {
+        //Desativa o bit de espera
+        EXTI->PR |= EXTI_PR_PR13; 
+        flag = 1;
+    }
+    //NVIC_ClearPendingIRQ(EXTI15_10_IRQn);
 }
