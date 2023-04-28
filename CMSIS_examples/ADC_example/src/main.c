@@ -3,13 +3,14 @@
 //============================================================
 //  VARIVEIS
 //============================================================
-
+volatile uint16_t adc_irq = 0;
 //============================================================
 //  PROTOTIPOS
 //============================================================
 void GPIO_Setup(void);
 void ADC_Setup(void);
 
+void ADC_IRQHandler(void);
 //============================================================
 //  MAIN
 //============================================================
@@ -21,12 +22,13 @@ int main(void)
     uint16_t adc_value = 0;
     while(1)
     {
-        while(!(ADC1->SR & ADC_SR_EOC))
+        //Logica para caso n usa a interrupcao
+        /*while(!(ADC1->SR & ADC_SR_EOC))
             ;
 
-        adc_value = ADC1->DR;
+        adc_value = ADC1->DR;*/
 
-        if(adc_value > 2000)
+        if((adc_value > 2000) | (adc_irq > 2000))
             GPIOC->BSRR |= GPIO_BSRR_BR13;
         else
             GPIOC->BSRR |= GPIO_BSRR_BS13;
@@ -65,4 +67,13 @@ void ADC_Setup(void)
     //Ativa o modo continuo e Inicia a conversao
     //nos pinos regulares
     ADC1->CR2 |= ADC_CR2_SWSTART | ADC_CR2_CONT;
+
+    //Ativa a interrupcao
+    ADC1->CR1 |= ADC_CR1_EOCIE;
+    NVIC_EnableIRQ(ADC_IRQn);
+}
+
+void ADC_IRQHandler(void)
+{
+    adc_irq = ADC1->DR;
 }
