@@ -56,6 +56,10 @@ void GPIO_Setup(void)
     GPIOA->MODER |= (3 << GPIO_MODER_MODE0_Pos);
 }
 
+/**
+ * @note para mudar a resolucao do adc, deve modificar
+ * os bits do ADC1->CR1[25:26], olhar no datasheet
+*/
 void ADC_Setup(void)
 {
     RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
