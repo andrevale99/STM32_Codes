@@ -77,6 +77,13 @@ void ADC_Setup(void)
     NVIC_EnableIRQ(ADC_IRQn);
 }
 
+/**
+ * @note O bit ADC1->EOC é limpado quando ler
+ * o registrador da converssao ADC1->DR, portanto nao tem 
+ * necessidade de limpa-lo para retirar o Pending bit.
+ * Também pode limpa-lo manualmente escrevendo 0 no 
+ * bit ADC1->EOC
+*/
 void ADC_IRQHandler(void)
 {
     adc_irq = ADC1->DR;
