@@ -1,6 +1,6 @@
 #include <stm32f411xe.h>
 
-#define FREQ 10
+#define FREQ 5
 
 //============================================================
 //  VARIVEIS
