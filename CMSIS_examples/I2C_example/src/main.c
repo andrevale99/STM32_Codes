@@ -9,6 +9,7 @@
 //  PROTOTIPOS
 //============================================================
 void GPIO_Setup(void);
+void I2C_setup(void);
 
 //============================================================
 //  MAIN
@@ -38,4 +39,9 @@ void GPIO_Setup(void)
     GPIOC->PUPDR = 0;
 
     GPIOC->BSRR |= GPIO_BSRR_BR13;
+}
+
+void I2C_setup(void)
+{
+    
 }
