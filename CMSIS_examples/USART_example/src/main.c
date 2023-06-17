@@ -42,7 +42,7 @@ void USART_setup()
     USART2->BRR = ( ( ( uartdiv / 16 ) << USART_BRR_DIV_Mantissa_Pos ) |
     				( ( uartdiv % 16 ) << USART_BRR_DIV_Fraction_Pos ) );
 
-    //Ativa a interrupcao e somente o TX do MCU
+    //Ativa a interrupcao e somente o RX do MCU
     USART2->CR1 |= USART_CR1_RE | USART_CR1_RXNEIE | USART_CR1_UE;
 
     NVIC_EnableIRQ(USART2_IRQn);
