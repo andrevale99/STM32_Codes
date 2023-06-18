@@ -1,4 +1,4 @@
-FILENAME   = main
+FILENAME   = atmega328p_USART
 PORT       = /dev/ttyUSB0
 DEVICE     = atmega328p
 PROGRAMMER = arduino
