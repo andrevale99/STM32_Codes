@@ -1,6 +1,6 @@
 #include <stm32f411xe.h>
 
-#define FREQ 10
+#define FREQ 100
 
 //============================================================
 //  VARIVEIS
@@ -20,8 +20,8 @@ int main(void)
 {
     GPIO_Setup();
     TIMER3_Setup();
-    
-    while(1)
+
+    while (1)
     {
         /*if(TIM3->CNT > 5000)
             GPIOC->BSRR |= GPIO_BSRR_BR13;
@@ -48,32 +48,35 @@ void GPIO_Setup(void)
 
 void TIMER3_Setup(void)
 {
-    //TIMER3 de 16 bits ativado
+    // TIMER3 de 16 bits ativado
     RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
 
-    //Carrega o valor maximo da contagem
+    // Carrega o valor maximo da contagem
     TIM3->ARR = 15635;
 
-    //Ativa o prescale do contador
+    // Ativa o prescale do contador
     TIM3->PSC = 1025;
 
-    //Valor de comaracao (Duty Cycle)
-    TIM3->CCR1 = (uint16_t)15635/FREQ;
+    // Valor de comaracao (Duty Cycle)
+    TIM3->CCR1 = 1;
 
-    //Ativa o TIMER como PWM 1 e ativa o preload
-    TIM3->CCMR1 = (0x6UL << TIM_CCMR1_OC1M_Pos) | TIM_CCMR1_OC1PE;
+    // Ativa o TIMER como PWM 1 e ativa o preload
+    TIM3->CCMR1 = ((0x6UL << TIM_CCMR1_OC1M_Pos) | TIM_CCMR1_OC1PE);
 
+    // Ativa a interrupcao por comparacao
     TIM3->CCER |= TIM_CCER_CC1E;
 
-    //Ativa o evento somente pelo Contador
+    // Ativa o evento somente pelo Contador
     TIM3->EGR |= TIM_EGR_UG;
 
-    //Ativa a interrupcao
-    TIM3->DIER |= TIM_DIER_UIE | TIM_DIER_CC1IE;
+    // Ativa a interrupcao
+    TIM3->DIER |= (TIM_DIER_UIE | TIM_DIER_CC1IE);
 
-    //Ativa a interrupcao somente pelo overflow/underflow ou DMA
-    //e ativa o contador
-    TIM3->CR1 |= TIM_CR1_URS | TIM_CR1_CEN;
+    // Ativa a interrupcao somente pelo overflow/underflow ou DMA
+    // e ativa o contador
+    TIM3->CR1 |= (TIM_CR1_ARPE | TIM_CR1_URS);
+
+    TIM3->CR1 |= TIM_CR1_CEN;
 
     NVIC_EnableIRQ(TIM3_IRQn);
     NVIC_SetPriority(TIM3_IRQn, 0);
@@ -81,12 +84,13 @@ void TIMER3_Setup(void)
 
 void TIM3_IRQHandler(void)
 {
-    //Sempre desativar antes de fazer qualquer coisa
-	TIM3->SR &= (~TIM_SR_UIF);
 
     if (TIM3->SR & TIM_SR_CC1IF)
     {
         TIM3->SR &= ~TIM_SR_CC1IF;
-        GPIOC->ODR ^= GPIO_ODR_OD13;  
+        GPIOC->ODR ^= GPIO_ODR_OD13;
+
+        // Sempre desativar
+        TIM3->SR &= (~TIM_SR_UIF);
     }
 }
