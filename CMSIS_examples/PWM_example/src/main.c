@@ -52,16 +52,24 @@ void TIMER3_Setup(void)
     RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
 
     //Carrega o valor maximo da contagem
-    TIM3->ARR = (uint16_t)15635/FREQ;
+    TIM3->ARR = 15635;
 
     //Ativa o prescale do contador
     TIM3->PSC = 1025;
+
+    //Valor de comaracao (Duty Cycle)
+    TIM3->CCR1 = (uint16_t)15635/FREQ;
+
+    //Ativa o TIMER como PWM 1 e ativa o preload
+    TIM3->CCMR1 = (0x6UL << TIM_CCMR1_OC1M_Pos) | TIM_CCMR1_OC1PE;
+
+    TIM3->CCER |= TIM_CCER_CC1E;
 
     //Ativa o evento somente pelo Contador
     TIM3->EGR |= TIM_EGR_UG;
 
     //Ativa a interrupcao
-    TIM3->DIER |= TIM_DIER_UIE;
+    TIM3->DIER |= TIM_DIER_UIE | TIM_DIER_CC1IE;
 
     //Ativa a interrupcao somente pelo overflow/underflow ou DMA
     //e ativa o contador
@@ -74,7 +82,11 @@ void TIMER3_Setup(void)
 void TIM3_IRQHandler(void)
 {
     //Sempre desativar antes de fazer qualquer coisa
-	TIM3->SR &= ~TIM_SR_UIF;
+	TIM3->SR &= (~TIM_SR_UIF);
 
-    GPIOC->ODR ^= GPIO_ODR_OD13;
+    if (TIM3->SR & TIM_SR_CC1IF)
+    {
+        TIM3->SR &= ~TIM_SR_CC1IF;
+        GPIOC->ODR ^= GPIO_ODR_OD13;  
+    }
 }
