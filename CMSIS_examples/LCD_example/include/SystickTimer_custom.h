@@ -17,7 +17,10 @@ volatile uint32_t msTicks = 0;
  * 
  * @note A funcao sera escrita no arquivo
  * "main.c" para poder colocar variaveis
- * ou funcoes para realizar os gerenciamentos
+ * ou funcoes para realizar os gerenciamentos.
+ * Lemabrando que a resolucao eh de 24 bits
+ * com a contagem regresiva, caso queira
+ * guardar o valor do contador
 */
 void SysTick_Handler(void);
 
