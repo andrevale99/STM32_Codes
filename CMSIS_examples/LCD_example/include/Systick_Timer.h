@@ -34,6 +34,9 @@ uint32_t Systick_Init()
 
     returnCode = SysTick_Config(SystemCoreClock / 1000);
 
+    //colocar tratamento de erro, caso
+    //nao de certo iniciar o systick
+
     return returnCode;
 }
 
