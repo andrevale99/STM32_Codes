@@ -1,3 +1,9 @@
+/**
+ * @brief Funcoes para ativar o Systick Timer
+ * para realizar as funcoes de atrasos (delays)
+ * e para gerenciar outras coisas (caso queira)
+ */
+
 #ifndef SYSTICK_TIMER_H
 #define SYSTICK_TIMER_H
 
@@ -5,11 +11,8 @@
 #include <stdint.h>
 
 /**
- * @brief Funcoes para ativar o Systick Timer
- * para realizar as funcoes de atrasos (delays)
- * e para gerenciar outras coisas (caso queira)
- */
-
+ * @brief Variavel para realizar a contagem
+*/
 volatile uint32_t msTicks = 0;
 
 /**
@@ -31,11 +34,11 @@ void SysTick_Handler(void);
  * @note A divisao por 1000 serve para realizar o
  * estouro da interrupcao a cada 1 ms
 */
-uint32_t Systick_Init()
+uint32_t Systick_Init(uint32_t div)
 {
     uint32_t returnCode;
 
-    returnCode = SysTick_Config(SystemCoreClock / 1000);
+    returnCode = SysTick_Config(SystemCoreClock / div);
 
     //colocar tratamento de erro, caso
     //nao de certo iniciar o systick
